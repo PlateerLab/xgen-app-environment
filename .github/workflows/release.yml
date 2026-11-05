@@ -1,0 +1,40 @@
+name: Release wheel
+
+# GitHub Release 자산으로 wheel 을 낸다. 쓰는 쪽은 그 주소로 버전을 고정한다.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      # Release 자산은 덮어쓸 수 있으므로 태그와 버전이 어긋나지 않게 여기서 막는다.
+      - name: 태그와 버전이 같은지 확인
+        run: |
+          V=$(python -c "import tomllib;print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          if [ "v$V" != "${GITHUB_REF_NAME}" ]; then
+            echo "태그 ${GITHUB_REF_NAME} 와 pyproject 버전 v$V 가 다릅니다"; exit 1
+          fi
+
+      - run: pip install build
+      - run: python -m build
+
+      - name: 설치되고 import 되는지 확인
+        run: |
+          pip install dist/*.whl
+          xgen-app-env list
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true

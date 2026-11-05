@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev]"
+      - run: pytest -q --tb=short
+
+  wheel:
+    name: Wheel carries every template file
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: pip install build
+      - run: python -m build --wheel
+      # 점 파일이 빠지면 앱 폴더가 원본과 달라진다. 파일 수까지 원본과 맞춘다.
+      - name: 저장소의 템플릿 파일이 wheel 에 전부 있는지 확인
+        run: |
+          python - <<'PY'
+          import glob, pathlib, zipfile
+          root = pathlib.Path("src/xgen_app_environment")
+          want = {p.relative_to(root.parent).as_posix() for p in root.rglob("*")
+                  if p.is_file() and "__pycache__" not in p.parts}
+          have = set(zipfile.ZipFile(glob.glob("dist/*.whl")[0]).namelist())
+          missing = sorted(want - have)
+          assert not missing, missing
+          print(len(want), "files ok")
+          PY

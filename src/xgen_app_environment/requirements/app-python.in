@@ -1,0 +1,4 @@
+# 앱 템플릿(fastapi-react·fastapi-api)의 파이썬 직접 의존성. templates/*/backend/requirements.txt 와 같아야 한다.
+fastapi==0.141.1
+uvicorn[standard]==0.41.0
+httpx==0.28.1

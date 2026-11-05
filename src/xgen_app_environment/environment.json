@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "python": {
+    "version": "3.14.7",
+    "image": "python:3.14.7-slim@sha256:51dafde81dbdb6ebde285137a295cf18a47ca95234fe388a343719cb97305b3d"
+  },
+  "node": {
+    "version": "24.21.0",
+    "image": "node:24.21.0-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20",
+    "npm": "11.21.0",
+    "npm_patches": {
+      "brace-expansion": "5.0.11",
+      "undici": "6.28.1"
+    }
+  },
+  "npm": {
+    "cache": "/opt/xgen/npm-cache",
+    "npmrc": "/usr/local/etc/npmrc",
+    "config": {
+      "prefer-offline": "true",
+      "fund": "false",
+      "audit": "false",
+      "update-notifier": "false"
+    }
+  },
+  "requirements": {
+    "app-python": "requirements/app-python.lock",
+    "image-libraries": "requirements/image-libraries.lock"
+  },
+  "system_packages": {
+    "build": ["build-essential"],
+    "agent_tools": [
+      "git", "openssh-client", "ca-certificates", "unzip", "jq", "procps", "iproute2",
+      "sqlite3", "file", "xxd", "tree", "ripgrep", "less", "patch", "zip", "wget"
+    ],
+    "documents": [
+      "libreoffice-impress-nogui", "libreoffice-writer-nogui", "libreoffice-calc-nogui", "fonts-nanum"
+    ]
+  }
+}
