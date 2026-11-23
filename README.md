@@ -21,7 +21,7 @@ XGEN 앱 템플릿과, 그 앱을 만들고 돌리는 컨테이너들이 함께 
 [Release](https://github.com/PlateerLab/xgen-app-environment/releases)의 wheel로 버전을 고정합니다.
 
 ```
-xgen-app-environment @ https://github.com/PlateerLab/xgen-app-environment/releases/download/v0.1.0/xgen_app_environment-0.1.0-py3-none-any.whl
+xgen-app-environment @ https://github.com/PlateerLab/xgen-app-environment/releases/download/v0.1.1/xgen_app_environment-0.1.1-py3-none-any.whl
 ```
 
 ## 사용
