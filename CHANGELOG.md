@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- `app-python.lock`·`image-libraries.lock` 의 certifi 를 2026.7.22 → 2026.10.23 으로 올림(GHSA-6q48-6c7w-9gw2, CRITICAL)
+
 ## 0.1.0
 
 - `fastapi-react/1`, `fastapi-api/1` 템플릿을 xgen-workflow-sandbox `app/templates`(49389763)에서 내용 변경 없이 옮김

@@ -1,6 +1,6 @@
 [project]
 name = "xgen-app-environment"
-version = "0.1.0"
+version = "0.1.1"
 description = "XGEN app templates and the shared runtime environment every container that builds or runs them uses"
 readme = "README.md"
 # 이 패키지를 쓰는 이미지마다 파이썬이 다르다(앱 런타임 3.14, 배포 서비스 3.13). 앱이 도는 버전과 별개다.
