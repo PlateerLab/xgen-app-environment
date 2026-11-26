@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- 두 템플릿 API 명세 페이지(`backend/apidocs.py`)의 앱 키 안내를 `Authorization: Bearer` 에서 `X-API-Key` 로 바꿈. 게이트웨이가 세션이 아닌 `Authorization` 을 401 로 끊어 Bearer 로는 API로 배포된 주소에 닿지 못한다
+
 ## 0.1.1
 
 - `app-python.lock`·`image-libraries.lock` 의 certifi 를 2026.7.22 → 2026.10.23 으로 올림(GHSA-6q48-6c7w-9gw2, CRITICAL)
