@@ -84,3 +84,27 @@ def test_cli(capsys, tmp_path):
     assert main(["list"]) == 0
     assert capsys.readouterr().out.split() == ["fastapi-api/1", "fastapi-react/1"]
     assert main(["copy", "nope", str(tmp_path / "x")]) == 1
+
+
+@pytest.mark.parametrize("template", env.list_templates(), ids=lambda t: t.name)
+def test_api_docs_tell_callers_to_send_the_key_as_x_api_key(template):
+    """게이트웨이는 Authorization 을 계정 세션으로만 읽고 세션이 아니면 401 로 끊는다.
+    API로 배포된 주소에 앱 키가 닿는 길은 X-API-Key 하나라서, 명세 페이지도 그렇게 안내한다."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(f"apidocs_{template.name}", template.path / "backend/apidocs.py")
+    apidocs = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(apidocs)
+    schema = {
+        "openapi": "3.1.0",
+        "info": {"title": "add", "version": "1"},
+        "paths": {"/api/add": {"post": {
+            "summary": "Add two numbers",
+            "requestBody": {"content": {"application/json": {"schema": {
+                "type": "object", "properties": {"a": {"type": "number"}, "b": {"type": "number"}}}}}},
+            "responses": {"200": {"description": "ok"}},
+        }}},
+    }
+    page = apidocs.render(schema)
+    assert "curl -X POST" in page and "X-API-Key: &lt;키&gt;" in page
+    assert "Bearer" not in page

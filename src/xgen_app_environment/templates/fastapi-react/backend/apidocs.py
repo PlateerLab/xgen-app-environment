@@ -265,7 +265,7 @@ def _curl(ep):
     query = "&".join(f"{p['name']}={html.escape(str(p['example']))}" for p in ep["params"] if p["in"] == "query")
     url = f"__BASE__{ep['path']}" + (f"?{query}" if query else "")
     parts = [f"curl -X {ep['method']} '{url}'"]
-    parts.append("-H 'Authorization: Bearer <키>'")
+    parts.append("-H 'X-API-Key: <키>'")
     if ep["body"] is not None:
         parts.append(f"-H 'Content-Type: {ep['body']['content_type']}'")
         parts.append("-d '" + json.dumps(ep["body"]["example"], ensure_ascii=False) + "'")
@@ -328,7 +328,7 @@ def render(schema):
         f"<p class=lead>API 명세{(' · 버전 ' + html.escape(version)) if version else ''} · 끝점 {len(eps)}개"
         + (f"<br>{html.escape(str(info.get('description')))}" if info.get("description") else "") + "</p>"
         "<p class=note>주소는 <code id=addr>이 페이지의 주소</code> 뒤에 끝점 경로를 붙인다. "
-        "API로 배포된 주소(<code>/v1/</code>, <code>/v2/</code> …)를 부를 때는 <code>Authorization: Bearer &lt;키&gt;</code> 헤더가 필요하고, "
+        "API로 배포된 주소(<code>/v1/</code>, <code>/v2/</code> …)를 부를 때는 <code>X-API-Key: &lt;키&gt;</code> 헤더가 필요하고, "
         "앱 자신의 주소를 로그인한 브라우저에서 부를 때는 필요 없다. 규격 원문은 <code>api/openapi.json</code>.</p>"
         f"<nav><ul>{nav}</ul></nav>{sections}</main>{_SCRIPT}</body></html>"
     )
